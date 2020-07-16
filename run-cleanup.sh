@@ -23,10 +23,10 @@ fi
 
 
 BASE="$(dirname "$(readlink -f "$0")")"
-SETUP_CLEANUP="${BASE}/setup-cleanup.sh"
+SETUP_MERCURIAL="${BASE}/setup-mercurial.sh"
 VIRTUALENV="${BASE}/data/py3-env"
 
-if ! /bin/bash "${SETUP_CLEANUP}"; then
+if ! /bin/bash "${SETUP_MERCURIAL}"; then
   echo "Error during setup."
   exit 2
 fi

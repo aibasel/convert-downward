@@ -1,12 +1,12 @@
 #!/bin/bash
 
 BASE="$(dirname "$(readlink -f "$0")")"
-SETUP_CLEANUP="${BASE}/setup-cleanup.sh"
+SETUP_MERCURIAL="${BASE}/setup-mercurial.sh"
 FAST_EXPORT_REPO="${BASE}/data/fast-export"
 FAST_EXPORT_VERSION="v200213-23-g44c50d0"
 
 
-if ! /bin/bash "${SETUP_CLEANUP}"; then
+if ! /bin/bash "${SETUP_MERCURIAL}"; then
   echo "Error during Mercurial setup."
 fi
 
