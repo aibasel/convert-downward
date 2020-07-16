@@ -16,7 +16,7 @@ repository is compatible with the official Fast Downward Git repository.
   resulting Git repository will be written to. The optional parameter can be used to 
   redirect the output of fast-export to a file.
 
-    ./run-cleanup-and-conversion.sh MERCURIAL_REPOSITORY CONVERTED_GIT_REPOSITORY \
+    ./run-all-steps.sh MERCURIAL_REPOSITORY CONVERTED_GIT_REPOSITORY \
         [--redirect-fast-export-stderr FILE]
 
   The conversion is done in three steps that can also be run individually. In this case
