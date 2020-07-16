@@ -19,11 +19,14 @@ repository is compatible with the official Fast Downward Git repository.
     ./run-cleanup-and-conversion.sh MERCURIAL_REPOSITORY CONVERTED_GIT_REPOSITORY \
         [--redirect-fast-export-stderr FILE]
 
-  The conversion is done in two steps that can also be run individually. In this case
-  CLEANED_MERCURIAL_REPOSITORY is a location where the intermediate cleaned up Mercurial 
-  repository will be written to:
-
-    ./run-cleanup.sh MERCURIAL_REPOSITORY CLEANED_MERCURIAL_REPOSITORY
+  The conversion is done in three steps that can also be run individually. In this case
+  ORDERED_REPOSITORY is an intermediate repository that ensures that the history
+  contains all commits in the same order as the Fast Downward master repository.
+  The CLEANED_MERCURIAL_REPOSITORY is a location where the intermediate cleaned
+   up Mercurial repository will be written to:
+  
+    ./run-order.sh MERCURIAL_REPOSITORY ORDERED_REPOSITORY
+    ./run-cleanup.sh ORDERED_REPOSITORY CLEANED_MERCURIAL_REPOSITORY
     ./run-conversion.sh CLEANED_MERCURIAL_REPOSITORY CONVERTED_GIT_REPOSITORY \
         [--redirect-fast-export-stderr FILE]
 
@@ -40,10 +43,16 @@ https://github.com/frej/fast-export.git).
   branch from the resulting Git repository by running `git branch -D subfeature`.
 
 ## Warnings
-- Both scripts generate a lot of output on stdout and stderr. If you want
-  to analyze it, better redirect it into files.
+- The `run-cleanup.sh` and `run-conversion.sh` scripts generate a lot of output 
+  on stdout and stderr. If you want to analyze it, better redirect it into files.
 - The cleanup script generates repeated warnings about missing or invalid tags.
   These are caused by moved or broken tags and can be ignored.
+
+## Details of the order process
+- clone the (Mercurial) Fast Downward master repository
+- strip all commits from the master repository that would be new to your
+  repository
+- pull your repository in the master repository
 
 ## Details of the cleanup process
 - fix and unify author names in commit message
