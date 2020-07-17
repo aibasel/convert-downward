@@ -37,11 +37,12 @@ source "${VIRTUALENV}/bin/activate"
 HGRCPATH= HGPLAIN= \
 hg clone "http://hg.fast-downward.org" "${ORDERED_REPOSITORY}"
 set +e  # hg incoming has an non-zero exit code if nothing is incoming
-CHANGESETS="$(hg incoming -R "${SRC_REPOSITORY}" --template "{node} " --quiet "${ORDERED_REPOSITORY}")"
+CHANGESETS="$(hg -R "${SRC_REPOSITORY}" incoming --template "{node} " --quiet "${ORDERED_REPOSITORY}")"
 set -e
 if [[ ! -z "${CHANGESETS}" ]]; then
+  echo stripping
   HGRCPATH= HGPLAIN= \
-  hg --config extensions.strip= strip ${CHANGESETS} --nobackup -R "${ORDERED_REPOSITORY}"
+  hg -R "${ORDERED_REPOSITORY}" --config extensions.strip= strip ${CHANGESETS} --nobackup
 fi
 HGRCPATH=  HGPLAIN= \
-hg pull -R "${ORDERED_REPOSITORY}" "${SRC_REPOSITORY}"
+hg -R "${ORDERED_REPOSITORY}" pull "${SRC_REPOSITORY}"
