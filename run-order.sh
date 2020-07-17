@@ -34,11 +34,14 @@ source "${VIRTUALENV}/bin/activate"
 
 # Disable all extensions.
 # (https://stackoverflow.com/questions/46612210/mercurial-disable-all-the-extensions-from-the-command-line)
-HGRCPATH= hg clone "http://hg.fast-downward.org" "${ORDERED_REPOSITORY}"
+HGRCPATH= HGPLAIN= \
+hg clone "http://hg.fast-downward.org" "${ORDERED_REPOSITORY}"
 set +e  # hg incoming has an non-zero exit code if nothing is incoming
 CHANGESETS="$(hg incoming -R "${SRC_REPOSITORY}" --template "{node} " --quiet "${ORDERED_REPOSITORY}")"
 set -e
 if [[ ! -z "${CHANGESETS}" ]]; then
-  HGRCPATH= hg --config extensions.strip= strip ${CHANGESETS} --nobackup -R "${ORDERED_REPOSITORY}"
+  HGRCPATH= HGPLAIN= \
+  hg --config extensions.strip= strip ${CHANGESETS} --nobackup -R "${ORDERED_REPOSITORY}"
 fi
-HGRCPATH= hg pull -R "${ORDERED_REPOSITORY}" "${SRC_REPOSITORY}"
+HGRCPATH=  HGPLAIN= \
+hg pull -R "${ORDERED_REPOSITORY}" "${SRC_REPOSITORY}"
