@@ -31,10 +31,11 @@ if ! /bin/bash "${SETUP_MERCURIAL}"; then
   exit 2
 fi
 source "${VIRTUALENV}/bin/activate"
-
 # Disable all extensions.
 # (https://stackoverflow.com/questions/46612210/mercurial-disable-all-the-extensions-from-the-command-line)
-HGRCPATH= HGPLAIN= \
+export HGRCPATH=
+export HGPLAIN=
+
 hg \
  --config extensions.renaming_mercurial_source="${BASE}/renaming_mercurial_source.py" \
  --config extensions.hgext.convert= \
@@ -47,7 +48,5 @@ hg \
  --branchmap "${BASE}/data/downward_branchmap.txt"
 
 cd "${CLEANED_REPOSITORY}"
-HGRCPATH= HGPLAIN= \
 hg --config extensions.strip= strip "branch(issue323)" --nobackup
-HGRCPATH= HGPLAIN= \
 hg --config extensions.strip= strip "branch(ipc-2011-fixes)" --nobackup
