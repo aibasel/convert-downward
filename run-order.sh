@@ -36,6 +36,7 @@ source "${VIRTUALENV}/bin/activate"
 export HGRCPATH=
 export HGPLAIN=
 
+echo "Cloning official repository"
 hg clone "http://hg.fast-downward.org" "${ORDERED_REPOSITORY}"
 set +e  # hg incoming has an non-zero exit code if nothing is incoming
 CHANGESETS="$(hg -R "${SRC_REPOSITORY}" incoming --template "{node} " --quiet "${ORDERED_REPOSITORY}")"
