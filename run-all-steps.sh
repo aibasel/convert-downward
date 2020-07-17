@@ -49,7 +49,7 @@ if ! "${RUN_ORDER}" "${SRC_REPOSITORY}" "${ORDERED_REPOSITORY}"; then
   exit 2
 fi
 
-if ! "${RUN_CLEANUP}" "${SRC_REPOSITORY}" "${CLEANED_REPOSITORY}"; then
+if ! "${RUN_CLEANUP}" "${ORDERED_REPOSITORY}" "${CLEANED_REPOSITORY}"; then
   echo "Cleanup failed."
   exit 2
 fi
