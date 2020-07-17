@@ -48,6 +48,13 @@ repository is compatible with the official Fast Downward Git repository.
   - The cleanup script generates repeated warnings about missing or invalid tags.
     These are caused by moved or broken tags and can be ignored.
 
+## Troubleshooting
+  If you have problems with the `run-all-steps.sh` script, try to run the steps
+  individually and carefully inspect the output of each step. Depending on your 
+  problems it might help to first pull the changes from 
+  `http://hg.fast-downward.org` in your repository and then start the conversion
+  process.
+  
 ## Details of the order process
   - clone the (Mercurial) Fast Downward master repository
   - strip all commits from the master repository that would be new to your
