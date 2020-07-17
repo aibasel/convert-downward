@@ -17,6 +17,7 @@ if ! /bin/bash "${SETUP_FAST_EXPORT}"; then
 fi
 
 source "${VIRTUALENV}/bin/activate"
+export HGRCPATH=
+export HGPLAIN=
 
-HGRCPATH= HGPLAIN= \
 python3 "${CONVERT}" "${INTERMEDIATE_REPOSITORY}" "${CONVERTED_REPOSITORY}" $@
