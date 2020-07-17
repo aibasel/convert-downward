@@ -23,50 +23,50 @@ repository is compatible with the official Fast Downward Git repository.
   ORDERED_REPOSITORY is an intermediate repository that ensures that the history
   contains all commits in the same order as the Fast Downward master repository.
   The CLEANED_MERCURIAL_REPOSITORY is a location where the intermediate cleaned
-   up Mercurial repository will be written to:
+  up Mercurial repository will be written to:
   
     ./run-order.sh MERCURIAL_REPOSITORY ORDERED_REPOSITORY
     ./run-cleanup.sh ORDERED_REPOSITORY CLEANED_MERCURIAL_REPOSITORY
     ./run-conversion.sh CLEANED_MERCURIAL_REPOSITORY CONVERTED_GIT_REPOSITORY \
         [--redirect-fast-export-stderr FILE]
 
-The scripts will automatically set up the required tools (a virtual
-environment with compatible versions of Mercurial and the fast-export tool
-https://github.com/frej/fast-export.git).
+  The scripts will automatically set up the required tools (a virtual
+  environment with compatible versions of Mercurial and the fast-export tool
+  https://github.com/frej/fast-export.git).
 
 ## Limitations
-- Multiple Mercurial heads with the same branch name are not supported. If your
-  repository has those, you will see
-  `Error: repository has at least one unnamed head: hg rXXX`.
-- If you have closed and merged a branch "subfeature" into a branch "feature"
-  and "feature" is not yet merged into "main", you might want to delete "subfeature"
-  branch from the resulting Git repository by running `git branch -D subfeature`.
+  - Multiple Mercurial heads with the same branch name are not supported. If your
+    repository has those, you will see
+    `Error: repository has at least one unnamed head: hg rXXX`.
+  - If you have closed and merged a branch "subfeature" into a branch "feature"
+    and "feature" is not yet merged into "main", you might want to delete "subfeature"
+    branch from the resulting Git repository by running `git branch -D subfeature`.
 
 ## Warnings
-- The `run-cleanup.sh` and `run-conversion.sh` scripts generate a lot of output 
-  on stdout and stderr. If you want to analyze it, better redirect it into files.
-- The cleanup script generates repeated warnings about missing or invalid tags.
-  These are caused by moved or broken tags and can be ignored.
+  - The `run-cleanup.sh` and `run-conversion.sh` scripts generate a lot of output 
+    on stdout and stderr. If you want to analyze it, better redirect it into files.
+  - The cleanup script generates repeated warnings about missing or invalid tags.
+    These are caused by moved or broken tags and can be ignored.
 
 ## Details of the order process
-- clone the (Mercurial) Fast Downward master repository
-- strip all commits from the master repository that would be new to your
-  repository
-- pull your repository in the master repository
+  - clone the (Mercurial) Fast Downward master repository
+  - strip all commits from the master repository that would be new to your
+    repository
+  - pull your repository in the master repository
 
 ## Details of the cleanup process
-- fix and unify author names in commit message
-- fix typos in branch names
-- remove large files from history that should not have been added
-- change commit message to follow the new convention which is to start with
-"`[BRANCH NAME] `"
+  - fix and unify author names in commit message
+  - fix typos in branch names
+  - remove large files from history that should not have been added
+  - change commit message to follow the new convention which is to start with
+    "`[BRANCH NAME] `"
 
 ## Details of the conversion process
-- convert a Mercurial repository to Git with `fast-export`
-- delete all Git branches that belong to Mercurial branches which have been
-  merged and closed
-- remove empty commits
-- run garbage collections
+  - convert a Mercurial repository to Git with `fast-export`
+  - delete all Git branches that belong to Mercurial branches which have been
+    merged and closed
+  - remove empty commits
+  - run garbage collections
 
 
 Let's rewrite history!
