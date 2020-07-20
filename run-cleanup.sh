@@ -36,6 +36,15 @@ source "${VIRTUALENV}/bin/activate"
 export HGRCPATH=
 export HGPLAIN=
 
+
+REGEX_BRANCHES="^$(hg branches --template "{branch}|" | \
+    sed "s/|$//g" | sed "s/\-/\\\-/g" | sed "s/\./\\\./g")$"
+if [[ ! "issue323" =~ ${REGEX_BRANCHES} ]] || \
+   [[ ! "ipc-2011-fixes" =~ ${REGEX_BRANCHES} ]]; then
+    echo "Your repository is missing the branches 'issue323' and 'ipc-2011-fixes' for the conversion."
+    exit 3
+fi
+
 hg \
  --config extensions.renaming_mercurial_source="${BASE}/renaming_mercurial_source.py" \
  --config extensions.hgext.convert= \
