@@ -37,11 +37,9 @@ export HGRCPATH=
 export HGPLAIN=
 
 
-REGEX_BRANCHES="^$(hg branches --template "{branch}|" | \
-    sed "s/|$//g" | sed "s/\-/\\\-/g" | sed "s/\./\\\./g")$"
-if [[ ! "issue323" =~ ${REGEX_BRANCHES} ]] || \
-   [[ ! "ipc-2011-fixes" =~ ${REGEX_BRANCHES} ]]; then
-    echo "Your repository is missing the branches 'issue323' and 'ipc-2011-fixes' for the conversion."
+if hg -R "${SRC_REPOSITORY}" incoming http://hg.fast-downward.org; then
+    echo 1>&2 "Your repository is missing commits from http://hg.fast-downward.org."
+    echo 1>&2 "You must pull from http://hg.fast-downward.org first."
     exit 3
 fi
 
