@@ -19,14 +19,13 @@ repository is compatible with the official Fast Downward Git repository.
     ./run-all-steps.sh MERCURIAL_REPOSITORY CONVERTED_GIT_REPOSITORY \
         [--redirect-fast-export-stderr FILE]
 
-  The conversion is done in three steps that can also be run individually. In this case
+  The conversion is done in two steps that can also be run individually. In this case
   ORDERED_REPOSITORY is an intermediate repository that ensures that the history
   contains all commits in the same order as the Fast Downward master repository.
   The CLEANED_MERCURIAL_REPOSITORY is a location where the intermediate cleaned
   up Mercurial repository will be written to:
   
-    ./run-order.sh MERCURIAL_REPOSITORY ORDERED_REPOSITORY
-    ./run-cleanup.sh ORDERED_REPOSITORY CLEANED_MERCURIAL_REPOSITORY
+    ./run-cleanup.sh MERCURIAL_REPOSITORY ORDERED_REPOSITORY CLEANED_MERCURIAL_REPOSITORY
     ./run-conversion.sh CLEANED_MERCURIAL_REPOSITORY CONVERTED_GIT_REPOSITORY \
         [--redirect-fast-export-stderr FILE]
 
@@ -55,18 +54,15 @@ repository is compatible with the official Fast Downward Git repository.
   `http://hg.fast-downward.org` in your repository and then start the conversion
   process.
   
-## Details of the order process
-  - clone the (Mercurial) Fast Downward master repository
-  - strip all commits from the master repository that would be new to your
-    repository
-  - pull your repository in the master repository
-
 ## Details of the cleanup process
+  - clone the (Mercurial) Fast Downward master repository
+  - pull your repository in the master repository
   - fix and unify author names in commit message
   - fix typos in branch names
   - remove large files from history that should not have been added
   - change commit message to follow the new convention which is to start with
     "`[BRANCH NAME] `"
+  - strip the open branches `issue323` and `ipc-2011-fixes`
 
 ## Details of the conversion process
   - convert a Mercurial repository to Git with `fast-export`

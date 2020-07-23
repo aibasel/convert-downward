@@ -30,7 +30,6 @@ CLEANED_REPOSITORY="${TEMP_DIR}/cleaned"
 BASE="$(realpath "$(dirname "$(readlink -f "$0")")")"
 SETUP_MERCURIAL="${BASE}/setup-mercurial.sh"
 SETUP_FAST_EXPORT="${BASE}/setup-fast-export.sh"
-RUN_ORDER="${BASE}/run-order.sh"
 RUN_CLEANUP="${BASE}/run-cleanup.sh"
 RUN_CONVERSION="${BASE}/run-conversion.sh"
 
@@ -44,12 +43,7 @@ if ! /bin/bash "${SETUP_FAST_EXPORT}"; then
   exit 2
 fi
 
-if ! "${RUN_ORDER}" "${SRC_REPOSITORY}" "${ORDERED_REPOSITORY}"; then
-  echo "Ordering failed."
-  exit 2
-fi
-
-if ! "${RUN_CLEANUP}" "${ORDERED_REPOSITORY}" "${CLEANED_REPOSITORY}"; then
+if ! "${RUN_CLEANUP}" "${SRC_REPOSITORY}" "${ORDERED_REPOSITORY}" "${CLEANED_REPOSITORY}"; then
   echo "Cleanup failed."
   exit 2
 fi
