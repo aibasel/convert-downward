@@ -38,7 +38,9 @@ repository is compatible with the official Fast Downward Git repository.
     repository has those, you will see
     `Error: repository has at least one unnamed head: hg rXXX`.
   - If you have closed and merged a branch "subfeature" into a branch "feature"
-    and "feature" is not yet merged into "main", you might want to delete "subfeature"
+    and "feature" is not yet merged into "main", you will receive:
+    `error: The branch 'BRANCH' is not fully merged.`
+    Don't worry. You might want to delete "subfeature"
     branch from the resulting Git repository by running `git branch -D subfeature`.
 
 ## Warnings
