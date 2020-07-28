@@ -11,7 +11,9 @@ repository is compatible with the official Fast Downward Git repository.
   - Git
 
 ## Usage
-  Run the script with the following command where MERCURIAL_REPOSITORY is the path to the 
+  To prepare your repository for the conversion pull all changes from
+  `http://hg.fast-downward.org`. Then run the script with the following 
+  command where MERCURIAL_REPOSITORY is the path to the 
   repository you want to convert and CONVERTED_GIT_REPOSITORY is the location where the
   resulting Git repository will be written to. The optional parameter can be used to 
   redirect the output of fast-export to a file.
@@ -51,10 +53,7 @@ repository is compatible with the official Fast Downward Git repository.
 
 ## Troubleshooting
   If you have problems with the `run-all-steps.sh` script, try to run the steps
-  individually and carefully inspect the output of each step. Depending on your 
-  problems it might help to first pull the changes from 
-  `http://hg.fast-downward.org` in your repository and then start the conversion
-  process.
+  individually and carefully inspect the output of each step.
   
 ## Details of the cleanup process
   - clone the (Mercurial) Fast Downward master repository
