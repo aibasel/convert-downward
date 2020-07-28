@@ -2,23 +2,17 @@
 
 set -euo pipefail
 
-if [[ $# -ne 3 ]]; then
-  echo "Invalid arguments. Use: $0 SRC TMP DST"
+if [[ $# -ne 2 ]]; then
+  echo "Invalid arguments. Use: $0 SRC DST"
   exit 1
 fi
 
 SRC_REPOSITORY="$1"
-ORDERED_REPOSITORY="$2"
-CLEANED_REPOSITORY="$3"
-shift 3
+CLEANED_REPOSITORY="$2"
+shift 2
 
 if [[ ! -d "${SRC_REPOSITORY}" ]]; then
   echo "Invalid argument. ${SRC_REPOSITORY} has to be a directory."
-  exit 1
-fi
-
-if [[ -e "${ORDERED_REPOSITORY}" ]]; then
-  echo "Invalid argument. ${ORDERED_REPOSITORY} may not exist."
   exit 1
 fi
 
@@ -26,6 +20,9 @@ if [[ -e "${CLEANED_REPOSITORY}" ]]; then
   echo "Invalid argument. ${CLEANED_REPOSITORY} may not exist."
   exit 1
 fi
+
+ORDERED_REPOSITORY="$(mktemp -d)"
+echo "Storing intermediate reordered repository under ${ORDERED_REPOSITORY}"
 
 
 BASE="$(dirname "$(readlink -f "$0")")"
@@ -42,20 +39,21 @@ source "${VIRTUALENV}/bin/activate"
 export HGRCPATH=
 export HGPLAIN=
 
+echo "Looking for missing commits"
 
-echo "Cloning official repository"
-hg clone "http://hg.fast-downward.org" "${ORDERED_REPOSITORY}"
-
-if hg -R "${SRC_REPOSITORY}" incoming "${ORDERED_REPOSITORY}"; then
+if hg -R "${SRC_REPOSITORY}" incoming http://hg.fast-downward.org; then
     echo 1>&2 "Your repository is missing commits from http://hg.fast-downward.org."
     echo 1>&2 "You must pull from http://hg.fast-downward.org first."
     exit 3
 fi
 
-echo "Enforce commit order"
+echo "Cloning official repository"
+hg clone http://hg.fast-downward.org "${ORDERED_REPOSITORY}"
+
+echo "Pulling own commits"
 hg -R "${ORDERED_REPOSITORY}" pull "${SRC_REPOSITORY}"
 
-echo "Clean up repository"
+echo "Creating cleaned-up repository"
 hg \
  --config extensions.renaming_mercurial_source="${BASE}/renaming_mercurial_source.py" \
  --config extensions.hgext.convert= \
@@ -67,6 +65,11 @@ hg \
  --splicemap "${BASE}/data/downward_splicemap.txt" \
  --branchmap "${BASE}/data/downward_branchmap.txt"
 
-cd "${CLEANED_REPOSITORY}"
-hg --config extensions.strip= strip "branch(issue323)" --nobackup
-hg --config extensions.strip= strip "branch(ipc-2011-fixes)" --nobackup
+echo "Stripping extraneous branches"
+hg -R "${CLEANED_REPOSITORY}" \
+   --config extensions.strip= \
+   strip "branch(issue323)" "branch(ipc-2011-fixes)" \
+   --nobackup
+
+echo "Removing intermediate reordered repository."
+rm -r "${ORDERED_REPOSITORY}"

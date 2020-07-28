@@ -23,9 +23,8 @@ if [[ -e "${CONVERTED_REPOSITORY}" ]]; then
 fi
 
 TEMP_DIR="$(mktemp -d)"
-echo "Storing intermediate repository under ${TEMP_DIR}"
+echo "Storing intermediate cleaned-up repository under ${TEMP_DIR}"
 # Generate a path to a non-existing temporary directory.
-ORDERED_REPOSITORY="${TEMP_DIR}/ordered"
 CLEANED_REPOSITORY="${TEMP_DIR}/cleaned"
 BASE="$(realpath "$(dirname "$(readlink -f "$0")")")"
 SETUP_MERCURIAL="${BASE}/setup-mercurial.sh"
@@ -43,7 +42,7 @@ if ! /bin/bash "${SETUP_FAST_EXPORT}"; then
   exit 2
 fi
 
-if ! "${RUN_CLEANUP}" "${SRC_REPOSITORY}" "${ORDERED_REPOSITORY}" "${CLEANED_REPOSITORY}"; then
+if ! "${RUN_CLEANUP}" "${SRC_REPOSITORY}" "${CLEANED_REPOSITORY}"; then
   echo "Cleanup failed."
   exit 2
 fi
@@ -53,5 +52,5 @@ if ! "${RUN_CONVERSION}" "${CLEANED_REPOSITORY}" "${CONVERTED_REPOSITORY}" $@; t
   exit 2
 fi
 
-echo "Removing intermediate repository."
+echo "Removing intermediate cleaned-up repository."
 rm -r "${TEMP_DIR}"

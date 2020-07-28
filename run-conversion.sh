@@ -2,6 +2,11 @@
 
 set -euo pipefail
 
+if [[ $# -lt 2 ]]; then
+  echo "Invalid arguments. Use: $0 SRC DST [optional args for fast-export]"
+  exit 1
+fi
+
 INTERMEDIATE_REPOSITORY="$1"
 CONVERTED_REPOSITORY="$2"
 shift 2
@@ -20,4 +25,4 @@ source "${VIRTUALENV}/bin/activate"
 export HGRCPATH=
 export HGPLAIN=
 
-python3 "${CONVERT}" "${INTERMEDIATE_REPOSITORY}" "${CONVERTED_REPOSITORY}" $@
+python3 "${CONVERT}" "${INTERMEDIATE_REPOSITORY}" "${CONVERTED_REPOSITORY}" "$@"
