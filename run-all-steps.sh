@@ -23,34 +23,34 @@ if [[ -e "${CONVERTED_REPOSITORY}" ]]; then
 fi
 
 TEMP_DIR="$(mktemp -d)"
-echo "Storing intermediate repository under ${TEMP_DIR}"
+echo "Storing intermediate cleaned-up repository under ${TEMP_DIR}"
 # Generate a path to a non-existing temporary directory.
-INTERMEDIATE_REPOSITORY="${TEMP_DIR}/intermediate"
+CLEANED_REPOSITORY="${TEMP_DIR}/cleaned"
 BASE="$(realpath "$(dirname "$(readlink -f "$0")")")"
-SETUP_CLEANUP="${BASE}/setup-cleanup.sh"
-SETUP_CONVERSION="${BASE}/setup-conversion.sh"
+SETUP_MERCURIAL="${BASE}/setup-mercurial.sh"
+SETUP_FAST_EXPORT="${BASE}/setup-fast-export.sh"
 RUN_CLEANUP="${BASE}/run-cleanup.sh"
 RUN_CONVERSION="${BASE}/run-conversion.sh"
 
-if ! /bin/bash "${SETUP_CLEANUP}"; then
-  echo "Error during the setup for the cleaning script."
+if ! /bin/bash "${SETUP_MERCURIAL}"; then
+  echo "Error during the Mercurial setup."
   exit 2
 fi
 
-if ! /bin/bash "${SETUP_CONVERSION}"; then
-  echo "Error during the setup for the conversion script."
+if ! /bin/bash "${SETUP_FAST_EXPORT}"; then
+  echo "Error during the 'fast-export' setup."
   exit 2
 fi
 
-if ! "${RUN_CLEANUP}" "${SRC_REPOSITORY}" "${INTERMEDIATE_REPOSITORY}"; then
+if ! "${RUN_CLEANUP}" "${SRC_REPOSITORY}" "${CLEANED_REPOSITORY}"; then
   echo "Cleanup failed."
   exit 2
 fi
 
-if ! "${RUN_CONVERSION}" "${INTERMEDIATE_REPOSITORY}" "${CONVERTED_REPOSITORY}" $@; then
+if ! "${RUN_CONVERSION}" "${CLEANED_REPOSITORY}" "${CONVERTED_REPOSITORY}" $@; then
   echo "Conversion failed."
   exit 2
 fi
 
-echo "Removing intermediate repository."
+echo "Removing intermediate cleaned-up repository."
 rm -r "${TEMP_DIR}"
